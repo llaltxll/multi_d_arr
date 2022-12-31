@@ -2,48 +2,32 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define SIZE1 10
-#define SIZE2 10
+#define SIZE1 9
+#define SIZE2 9
 
-void print2d(int** a);
-void init_arr(int** a);
+void print2d(int** a, int s1, int s2);
+void init_arr(int** a, int s1, int s2);
+int** alloc_arr(int s1, int s2);
+void free_arr(int** a, int s1);
+int** cp_arr_2d(int** a, int s1, int s2);
 
 int main() {
-	int i;
-	int** arr = NULL;
-	arr = (int**)malloc(sizeof(int*) * SIZE1);
-	assert(arr != NULL && "d1 malloc");
-	for (i = 0; i < SIZE2; i++)
-	{
-		arr[i] = (int*)malloc(sizeof(int) * SIZE2);
-		assert(arr[i] != NULL && "d2 malloc");
-	}
-	init_arr(arr);
-	print2d(arr);
+	/* 2LEARN: if insterad we initialize arr here to NULL
+	 * pass pointer to alloc_arr() and malloc there
+	 * we get an access violation
+	 */
+	int** arr = alloc_arr(SIZE1, SIZE2);
+	int** arr2 = NULL;
+	/* int arr3[][9] is the same as *arr[9]
+	 * which makes it incompatible with int **
+	 */
+	init_arr(arr, SIZE1, SIZE2);
+	print2d(arr, SIZE1, SIZE2);
 
-	
+	arr2 = cp_arr_2d(arr, SIZE1, SIZE2);
+	print2d(arr2, SIZE1, SIZE2);
+
+	free_arr(arr, SIZE1);
+	free_arr(arr2, SIZE1);
 	return 0;
-}
-
-void print2d(int** a) 
-{
-	int i, j;
-	for (i = 0; i < SIZE1; i++)
-	{
-		printf("{");
-		for (j = 0; j < SIZE2; j++)
-		{	
-			printf("%3d%c", a[i][j], (j == SIZE2 - 1)?'\0' : ',');
-		}
-		printf("}\n\n");
-	}
-}
-void init_arr(int** a)
-{
-	int i, j;
-	for (i = 0; i < SIZE1; i++)
-	{
-		for (j = 0; j < SIZE2; j++)
-			a[i][j] = (i+1) * (j+1);
-	}
 }
