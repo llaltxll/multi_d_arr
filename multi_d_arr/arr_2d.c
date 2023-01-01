@@ -60,6 +60,7 @@ int** cp_arr_2d(int** a, int s1, int s2)
 	{
 		for (j = 0; j < s2; j++)
 			*(*(b + i) + j) = a[i][j];
-	}
+			/* ^ same as b[i][j] */
+	}		
 	return b;
 }
